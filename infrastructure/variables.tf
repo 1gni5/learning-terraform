@@ -36,3 +36,9 @@ variable "app_name" {
   type        = string
   default     = "myfunctionapp"
 }
+
+variable "static_web_app_name" {
+  description = "The name of the Static Web App."
+  type        = string
+  default     = "mystaticwebapp"
+}
