@@ -28,11 +28,11 @@ variable "resource_group_name" {
 variable "region" {
   description = "The Azure region where resources will be deployed."
   type        = string
-  default     = "francecentral"
+  default     = "westeurope"
 }
 
 variable "app_name" {
-  description = "The application name used to name the Function App resources."
+  description = "The application name."
   type        = string
   default     = "myfunctionapp"
 }
