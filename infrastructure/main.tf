@@ -40,3 +40,35 @@ resource "azurerm_static_web_app" "static_web_app" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 }
+
+# CosmosDB account
+resource "azurerm_cosmosdb_account" "db_account" {
+  name = "${var.app_name}-cosmosdb-account"
+  location = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  offer_type = "Standard"
+  capabilities {
+    name = "EnableServerless"
+  }
+  consistency_policy {
+    consistency_level = "Eventual"
+  }
+  geo_location {
+    location = "northeurope"
+    failover_priority = 0
+  }
+} 
+
+resource "azurerm_cosmosdb_sql_database" "sql_database" {
+  name                = "${var.app_name}-sql-db"
+  resource_group_name = azurerm_cosmosdb_account.db_account.resource_group_name
+  account_name        = azurerm_cosmosdb_account.db_account.name
+}
+
+resource "azurerm_cosmosdb_sql_container" "sql_container" {
+  name                = "${var.app_name}-sql-container"
+  resource_group_name = azurerm_cosmosdb_account.db_account.resource_group_name
+  account_name        = azurerm_cosmosdb_account.db_account.name
+  database_name       = azurerm_cosmosdb_sql_database.sql_database.name
+  partition_key_paths = ["/definition/id"]
+}
